@@ -20,3 +20,9 @@ html {
   @apply text-neutral p-4 rounded-lg shadow-md;
   background-color: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
 }
+
+.infoCard h2 {
+  @apply text-xl font-bold mb-2;
+  color: var(--color-primary);
+}
+

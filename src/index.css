@@ -23,3 +23,7 @@ html {
 .btn-primary {
   @apply bg-primary hover:bg-primary-light;
 }
+
+.btn-secondary {
+  @apply  bg-secondary-light hover:bg-secondary;
+}

@@ -1,6 +1,7 @@
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Link } from "react-router-dom";
+import { InformationCard } from "../components/informationCard";
 
 export function Home() {
     return (
@@ -20,17 +21,14 @@ export function Home() {
                     </Link>
                 </div>
 
-                <div className="max-w-xl text-justify italic">
-                    <h2 className="text-xl font-semibold mb-2">Simple</h2>
-                    <p className="text-md italic">Aucun compte à créer. Vos informations suffisent pour consulter vos résultats.</p>
-                </div>
-                <div className="max-w-xl text-justify italic">
-                    <h2 className="text-xl font-semibold mb-2">Rapide</h2>
-                    <p className="text-md italic">Accédez à vos résultats en quelques instants, depuis n'importe quel appareil.</p>
-                </div>
-                <div className="max-w-xl text-justify italic">
-                    <h2 className="text-xl font-semibold mb-2">Sécurisé</h2>
-                    <p className="text-md italic">L'accès à vos résultats est soumis à la vérification de vos informations personnelles.</p>
+                <div className="max-w-xl flex flex-col justify-center items-center">
+                    <div className="grid grid-cols-2 mb-1 gap-2">
+                        <InformationCard title="Rapide" description="Accédez à vos résultats en quelques instants, depuis n'importe quel appareil." />
+                        <InformationCard title="Sécurisé" description="L'accès à vos résultats est soumis à la vérification de vos informations personnelles." />
+                    </div>
+                    <div>
+                        <InformationCard title="Facile" description="Notre interface conviviale vous permet de naviguer facilement et de trouver vos résultats sans tracas." />
+                    </div>
                 </div>
             </main>
             

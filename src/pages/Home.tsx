@@ -2,33 +2,35 @@ import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Link } from "react-router-dom";
 
-import logo from "../assets/logo.png";
-
 export function Home() {
     return (
         <>
             <Header />
 
-            <main className="flex justify-center items-center p-4">
-                <div className="max-w-md text-center">
-                    <h1 className="text-4xl font-bold mb-4">Consulter vos résultats en toutes facilités</h1>
+            <main className="flex flex-col justify-center items-center p-4">
+                <div className="max-w-xl text-justify mb-5">
+                    <h1 className="text-4xl font-bold mb-4 text-center">Consulter vos résultats académiques</h1>
                     <p className="text-lg font-bold">
-                        Cette platforme centralise l'enssemble de vos résultats et permet un accès rapide et facile à vos informations.
+                        Retrouvez vos résultats scolaires simplement et rapidement. 
+                        Aucun compte n'est nécessaire : munissez-vous de votre matricule et de votre date 
+                        de naissance pour accéder à vos résultats.
                     </p>
-                    <p className="text-lg font-bold">
-                        Une seule chose à faire : consulter vos résultats quand vous le souhaitez.
-                    </p>
-                    <p className="mt-4 flex space-between justify-center gap-4">
-                        <Link className="block" to="/level">
-                            <button className="btn btn-primary">Consulter mes resultats</button>
-                        </Link>
-                        <Link className="block" to="/level">
-                            <button className="btn btn-secondary">Consulter mes resultats</button>
-                        </Link>
-                    </p>
+                    <Link className="block w-full" to="/level">
+                        <button className="btn btn-primary">Consulter mes resultats</button>
+                    </Link>
                 </div>
-                <div className="max-w-md w-full h-full">
-                    <img className="w-64 h-64" src={logo} alt="logo" />
+
+                <div className="max-w-xl text-justify italic">
+                    <h2 className="text-xl font-semibold mb-2">Simple</h2>
+                    <p className="text-md italic">Aucun compte à créer. Vos informations suffisent pour consulter vos résultats.</p>
+                </div>
+                <div className="max-w-xl text-justify italic">
+                    <h2 className="text-xl font-semibold mb-2">Rapide</h2>
+                    <p className="text-md italic">Accédez à vos résultats en quelques instants, depuis n'importe quel appareil.</p>
+                </div>
+                <div className="max-w-xl text-justify italic">
+                    <h2 className="text-xl font-semibold mb-2">Sécurisé</h2>
+                    <p className="text-md italic">L'accès à vos résultats est soumis à la vérification de vos informations personnelles.</p>
                 </div>
             </main>
             

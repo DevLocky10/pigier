@@ -18,7 +18,7 @@ export function Home() {
                     <p className="text-lg font-bold">
                         Une seule chose à faire : consulter vos résultats quand vous le souhaitez.
                     </p>
-                    <p>
+                    <p className="mt-4 flex space-between justify-center gap-4">
                         <Link className="block" to="/level">
                             <button className="btn btn-primary">Consulter mes resultats</button>
                         </Link>

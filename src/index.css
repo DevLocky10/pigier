@@ -13,5 +13,5 @@
 }
 
 html {
-  @apply bg-neutral text-neutral;
+  @apply bg-neutral;
 }

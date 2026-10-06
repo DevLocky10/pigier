@@ -7,12 +7,11 @@
   --color-secondary: #034AA6;
   --color-secondary-light: #0568A6;
 
-  --color-background: #D8E8F2;
   --color-surface: #789EBF;
 
   --color-neutral: #F0EDEF;
 }
 
 html {
-  @apply bg-background text-neutral;
+  @apply bg-neutral text-neutral;
 }

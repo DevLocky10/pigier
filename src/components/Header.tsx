@@ -5,7 +5,7 @@ export function Header() {
   return (
     <header className="flex justify-between items-center p-4 bg-secondary">
         <Link className="block" to="/">
-            <img src={logo} alt="logo" />
+            <img className="h-20 w-20" src={logo} alt="logo" />
         </Link>
       
         <Link className="block" to="/level">

@@ -5,7 +5,7 @@ interface CardProps {
 
 export function InformationCard({ title, description }: CardProps) {
   return (
-    <div className="rounded-lg  shadow-md overflow-hidden">
+    <div className="rounded-lg shadow-md overflow-hidden infoCard">
       <div className="p-4">
         <h3>{title}</h3>
         <p>{description}</p>

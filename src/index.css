@@ -14,26 +14,29 @@
 
 html {
   @apply bg-neutral;
+  user-select: none;
 }
 
-.btn {
-  @apply px-4 py-2 rounded-md text-neutral font-semibold;
-}
+@layer utilities {
+  .btn {
+    @apply px-4 py-2 rounded-md text-neutral font-semibold;
+  }
 
-.btn-primary {
-  @apply bg-primary hover:bg-primary-light;
-}
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-light;
+  }
 
-.btn-secondary {
-  @apply  bg-secondary-light hover:bg-secondary;
-}
+  .btn-secondary {
+    @apply  bg-secondary-light hover:bg-secondary;
+  }
 
-.infoCard {
-  @apply text-primary p-4 rounded-lg shadow-md;
-  background-color: linear-gradient(to left, #034AA6, #0568A6);
-}
+  .infoCard {
+    @apply p-4 rounded-lg shadow-md;
+    background: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
+  }
 
-.infoCard h2 {
-  @apply text-xl font-bold mb-2;
-  color: var(--color-primary);
+  .infoCard h2 {
+    @apply text-xl font-bold mb-2;
+    color: var(--color-primary);
+  }
 }

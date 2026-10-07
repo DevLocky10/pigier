@@ -1,4 +1,4 @@
-import { LinkCard } from "../components/LevelCard";
+import { LinkCard } from "../components/LinkCard";
 
 export function Level() {
   return (

@@ -27,9 +27,10 @@ html {
 .btn-secondary {
   @apply  bg-secondary-light hover:bg-secondary;
 }
+
 .infoCard {
-  @apply text-neutral p-4 rounded-lg shadow-md;
-  background-color: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
+  @apply text-primary p-4 rounded-lg shadow-md;
+  background-color: linear-gradient(to left, #034AA6, #0568A6);
 }
 
 .infoCard h2 {

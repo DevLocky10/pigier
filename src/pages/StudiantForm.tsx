@@ -4,13 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 export function StudiantForm() {
     const navigate = useNavigate();
 
-    //const { level_id, session_id } = useParams<{ level_id: string; session_id: string }>();
+    const { level_id, session_id } = useParams<{ level_id: string; session_id: string }>();
     const [ matricule, setMatricule ] = useState("");
     const [ birthdate, setBirthdate ] = useState("");
 
     const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         navigate("/result");
+        console.log(`Matricule: ${matricule}, Birthdate: ${birthdate}, Level ID: ${level_id}, Session ID: ${session_id}`);
     }
 
     return (

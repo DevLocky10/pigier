@@ -40,4 +40,9 @@ html {
     @apply text-xl font-bold mb-2;
     color: var(--color-primary);
   }
+
+  .linkCard {
+    @apply p-4 rounded-lg shadow-md text-lg font-bold;
+    background: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
+  }
 }

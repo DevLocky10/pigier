@@ -8,6 +8,8 @@ export function Level() {
             <LinkCard to="/session/lvl_1" content="Licence 1"/>
             <LinkCard to="/session/lvl_2" content="Licence 2"/>
             <LinkCard to="/session/lvl_3" content="Licence 3"/>
+            <LinkCard to="/session/lvl_4" content="Master 1"/>
+            <LinkCard to="/session/lvl_5" content="Master 2"/>
         </div>
     </div>
   );

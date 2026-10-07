@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { LinkCard } from "../components/LinkCard";
 
-export function session() {
+export function Session() {
 
   const level_id = useParams().level_id;
 

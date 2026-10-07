@@ -16,7 +16,7 @@ export function Home() {
                         Aucun compte n'est nécessaire : munissez-vous de votre matricule et de votre date 
                         de naissance pour accéder à vos résultats.
                     </p>
-                    <Link className="block w-full" to="/level">
+                    <Link className="block w-full mt-4" to="/level">
                         <button className="btn btn-primary">Consulter mes resultats</button>
                     </Link>
                 </div>

@@ -1,3 +1,4 @@
+import html2pdf from "html2pdf.js";
 import logo from "../assets/logo_pigier_bulettin.png";
 
 const mockData = {
@@ -79,26 +80,65 @@ const mockData = {
 }
 
 export function ResultPage() {
-
     const data = mockData;
 
     const notesMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + (cur.note*cur.cect), 0 );
     const cectMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
+    const cectCapMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
     const averageMaj = notesMajSum / cectMajSum;
     
     const notesMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + (cur.note*cur.cect), 0 );
-    const cectMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
+    const cectMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
+    const cectCapMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
     const averageMin = notesMinSum / cectMinSum;
 
+    const handleDownload = () => {
+        const element = document.getElementById("print-section");
+
+        if (!element) {
+            console.error("Section introuvable");
+            return;
+        }
+
+        const options = {
+            margin: 0,
+            filename: `${data.name}.pdf`,
+            image: {
+                type: "jpeg" as const,
+                quality: 0.98,
+            },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+            },
+            jsPDF: {
+                unit: "mm",
+                format: "a4",
+                orientation: "portrait" as const
+            },
+        };
+
+        html2pdf()
+            .set(options)
+            .from(element)
+            .save();
+    };
+    
     return (
         <div>
-            <div className="flex justify-center p-2">
-                <button className="btn btn-primary w-full max-w-lg">
+            <div className="print:hidden flex justify-center p-2">
+                <button 
+                    className="btn btn-primary w-full max-w-lg"
+                    onClick={handleDownload}
+                >
                     Télécharger mon relevé de notes
                 </button>
             </div>
 
-            <div className="w-full border hidden md:flex flex-col items-center justify-center p-2 gap-8">
+            <div
+                id="print-section"
+                className="w-full hidden print:flex md:flex flex-col items-center justify-center p-2 gap-8"
+            >
                 <div className="flex items-center justify-between w-full">
                     <img className="block aspect-video h-25" src={logo} alt="logo" />
                     <div className="flex flex-col items-center justify-center">
@@ -134,7 +174,7 @@ export function ResultPage() {
                                             <td className="text-center py-2">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>
                                             <td className="text-center py-2">{res.result}</td>
-                                            <td className="text-center py-2">{`${res.session} ${data.year}`}</td>
+                                            <td className="text-center py-2">{res.session}</td>
                                             <td className="text-center py-2">{res.cect_cap}</td>
                                         </tr>
                                     )
@@ -170,7 +210,7 @@ export function ResultPage() {
                                             <td className="text-center py-2 ">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>
                                             <td className="text-center py-2">{res.result}</td>
-                                            <td className="text-center py-2">{`${res.session} ${data.year}`}</td>
+                                            <td className="text-center py-2">{res.session}</td>
                                             <td className="text-center py-2">{res.cect_cap}</td>
                                         </tr>
                                     )
@@ -187,7 +227,9 @@ export function ResultPage() {
                         </tbody>   
                     </table>
                 </div>
-                <div></div>
+                <p className="w-full font-bold text-right">
+                    TOTAL CECT CAPITALISE: {`${cectCapMajSum+cectCapMinSum} / ${cectMajSum+cectMinSum}`}
+                </p>
             </div>
         </div>
     );

@@ -18,6 +18,10 @@ html {
   user-select: none;
 }
 
+*{
+  @apply print:hidden
+}
+
 @layer utilities {
   .btn {
     @apply px-4 py-2 rounded-md text-neutral font-semibold;

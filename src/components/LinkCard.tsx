@@ -1,9 +1,11 @@
-export function LinkCard({ content }: { content: string }) {
+import { Link } from "react-router-dom";
+
+export function LinkCard({ content, to }: { content: string; to: string }) {
   return (
-    <div className="rounded-lg shadow-md overflow-hidden linkCard">
-      <div className="p-4">
-        <h2>{content}</h2>
+    <Link to={to} className="linkCard w-full overflow-hidden rounded-lg shadow-md">
+      <div className="rounded-lg p-4 text-center text-base leading-snug text-primary transition-colors duration-300 hover:bg-primary hover:text-white sm:text-lg">
+        <h2 className="text-center text-base leading-snug sm:text-lg">{content}</h2>
       </div>
-    </div>
+    </Link>
   );
 }

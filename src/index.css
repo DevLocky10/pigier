@@ -15,11 +15,6 @@
 html {
   @apply text-sm md:text-lg lg:text-xl;
   @apply bg-neutral;
-  user-select: none;
-}
-
-*{
-  @apply print:hidden
 }
 
 @layer utilities {

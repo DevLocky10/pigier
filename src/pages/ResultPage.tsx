@@ -80,6 +80,51 @@ const mockData = {
     }
 }
 
+function normalizeOklchColor(value: string): string {
+    return value.replace(/oklch\(([^)]*)\)/gi, (match, parameters: string) => {
+        const [channels, alphaChannel] = parameters.split("/");
+        const values = channels.trim().split(/[\s,]+/);
+        const parseChannel = (channel: string) => {
+            const number = Number.parseFloat(channel);
+            return channel.endsWith("%") ? number / 100 : number;
+        };
+
+        const lightness = parseChannel(values[0]);
+        const chroma = parseChannel(values[1]);
+        const hueValue = values[2];
+        const hue = hueValue.endsWith("turn")
+            ? Number.parseFloat(hueValue) * 2 * Math.PI
+            : hueValue.endsWith("rad")
+                ? Number.parseFloat(hueValue)
+                : hueValue.endsWith("grad")
+                    ? Number.parseFloat(hueValue) * Math.PI / 200
+                    : Number.parseFloat(hueValue) * Math.PI / 180;
+
+        if (![lightness, chroma, hue].every(Number.isFinite)) return match;
+
+        const a = chroma * Math.cos(hue);
+        const b = chroma * Math.sin(hue);
+        const l = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+        const m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+        const s = (lightness - 0.0894841775 * a - 1.291485548 * b) ** 3;
+        const linearToSrgb = (channel: number) => {
+            const clipped = Math.max(0, Math.min(1, channel));
+            return Math.round(255 * (clipped <= 0.0031308
+                ? 12.92 * clipped
+                : 1.055 * clipped ** (1 / 2.4) - 0.055));
+        };
+
+        const red = linearToSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s);
+        const green = linearToSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s);
+        const blue = linearToSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s);
+        const alpha = alphaChannel ? parseChannel(alphaChannel.trim()) : 1;
+
+        return alpha < 1
+            ? "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")"
+            : "rgb(" + red + ", " + green + ", " + blue + ")";
+    });
+}
+
 type ResultItem = (typeof mockData.results.major)[number];
 
 function ResultSection({ title, items }: { title: string; items: ResultItem[] }) {
@@ -195,7 +240,30 @@ export function ResultPage() {
                 margin: 8,
                 filename: "releve-" + data.matricule + ".pdf",
                 image: { type: "jpeg" as const, quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    onclone: (clonedDocument: Document) => {
+                        const originalElements = [element, ...Array.from(element.querySelectorAll<HTMLElement>("*"))];
+                        const clonedRoot = clonedDocument.getElementById("print-section") as HTMLElement | null;
+                        if (!clonedRoot) return;
+
+                        const clonedElements = [clonedRoot, ...Array.from(clonedRoot.querySelectorAll<HTMLElement>("*"))];
+                        originalElements.forEach((original, index) => {
+                            const cloned = clonedElements[index];
+                            if (!cloned) return;
+
+                            const computed = window.getComputedStyle(original);
+                            for (let propertyIndex = 0; propertyIndex < computed.length; propertyIndex += 1) {
+                                const property = computed.item(propertyIndex);
+                                const value = computed.getPropertyValue(property);
+                                if (/oklch\(/i.test(value)) {
+                                    cloned.style.setProperty(property, normalizeOklchColor(value));
+                                }
+                            }
+                        });
+                    },
+                },
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const },
             })
             .from(element)
@@ -213,7 +281,7 @@ export function ResultPage() {
             <div className="mx-auto max-w-6xl">
                 <div className="mb-4 flex justify-end sm:mb-6 print:hidden">
                     <div className="w-full sm:w-auto">
-                        <button className="btn btn-primary w-full text-sm sm:w-auto sm:text-base disabled:cursor-wait disabled:opacity-60" onClick={handleDownload} type="button" disabled={isDownloading} aria-busy={isDownloading}>
+                        <button className="btn btn-primary w-full text-sm sm:w-auto sm:text-base cursor-pointer select-none disabled:cursor-wait disabled:opacity-60" onClick={handleDownload} type="button" disabled={isDownloading} aria-busy={isDownloading}>
                             {isDownloading ? "Génération du PDF…" : "Télécharger le relevé PDF"}
                         </button>
                         {downloadError && <p className="mt-2 text-sm text-red-700" role="alert">{downloadError}</p>}

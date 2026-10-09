@@ -14,15 +14,15 @@ export function StudiantForm() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-2">
-            <h2 className="font-bold mb-8 text-center text-3xl">Saisissez vos informations</h2>
+            <h2 className="mb-6 text-center text-2xl leading-tight font-bold tracking-tight sm:mb-8 sm:text-3xl">Saisissez vos informations</h2>
             <div className="flex flex-col items-center justify-center gap-8 w-full md:max-w-lg">
                 <form className="w-full max-w-lg bg-secondary p-8 rounded-lg shadow-md"
                     onSubmit={onSubmit}
                 >
                     <div className="mb-4">
-                        <label className="mb-1 block text-neutral" htmlFor="matricule">Matricule</label>
+                        <label className="mb-1 block text-sm leading-5 font-medium text-neutral sm:text-base" htmlFor="matricule">Matricule</label>
                         <input
-                            className="shadow text-gray-100 appearance-none border border-primary  rounded w-full py-2 px-3 leading-tight focus:border-2 focus:outline-none focus:shadow-outline"
+                            className="shadow text-gray-100 appearance-none border border-primary  rounded w-full px-3 py-2 text-base leading-6 focus:border-2 focus:outline-none focus:shadow-outline"
                             id="matricule"
                             name="matricule"
                             type="text"
@@ -34,7 +34,7 @@ export function StudiantForm() {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="mb-1 block text-neutral" htmlFor="birthdate">Date de naissance</label>
+                        <label className="mb-1 block text-sm leading-5 font-medium text-neutral sm:text-base" htmlFor="birthdate">Date de naissance</label>
                         <input
                             className="shadow text-gray-100 appearance-none border border-primary  rounded w-full py-2 px-3 leading-tight focus:border-2 focus:outline-none focus:shadow-outline"
                             id="birthdate"
@@ -47,7 +47,7 @@ export function StudiantForm() {
                     </div>
                     <div className="flex items-center justify-between w-full">
                         <button
-                            className="bg-primary w-full hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className="bg-primary w-full hover:bg-primary-light text-base leading-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
                         >
                             Consulter mes résultats

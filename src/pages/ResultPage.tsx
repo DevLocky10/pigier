@@ -88,8 +88,8 @@ export function ResultPage() {
     const averageMaj = notesMajSum / cectMajSum;
     
     const notesMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + (cur.note*cur.cect), 0 );
-    const cectMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
-    const cectCapMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
+    const cectMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
+    const cectCapMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
     const averageMin = notesMinSum / cectMinSum;
 
     const handleDownload = () => {
@@ -102,7 +102,7 @@ export function ResultPage() {
 
         const options = {
             margin: 0,
-            filename: `${data.name}.pdf`,
+                    filename: `releve-${data.matricule}.pdf`,
             image: {
                 type: "jpeg" as const,
                 quality: 0.98,
@@ -126,6 +126,9 @@ export function ResultPage() {
     
     return (
         <div>
+            <p className="mx-auto max-w-4xl p-3 text-center font-semibold text-red-800 bg-red-100">
+                Démonstration : ces résultats sont fictifs et ne correspondent pas aux informations saisies.
+            </p>
             <div className="print:hidden flex justify-center p-2">
                 <button 
                     className="btn btn-primary w-full max-w-lg"
@@ -137,7 +140,7 @@ export function ResultPage() {
 
             <div
                 id="print-section"
-                className="w-full hidden print:flex md:flex flex-col items-center justify-center p-2 gap-8"
+                className="w-full flex flex-col items-center justify-center p-2 gap-8"
             >
                 <div className="flex items-center justify-between w-full">
                     <img className="block aspect-video h-25" src={logo} alt="logo" />
@@ -148,9 +151,9 @@ export function ResultPage() {
                     </div>
                 </div>
                 <div className="flex flex-col justify-start w-full">
-                    <span className="inline-bolck font-bold">{data.name.toUpperCase()}</span>
-                    <span className="inline-bolck">Matricule: {data.matricule}</span>
-                    <span className="inline-bolck">Inscrit(e) en: {data.Class}</span>
+                    <span className="font-bold">{data.name.toUpperCase()}</span>
+                    <span>Matricule: {data.matricule}</span>
+                    <span>Inscrit(e) en: {data.Class}</span>
                 </div>
                 <div className="w-full flex flex-col align-center gap-5">
                     <table className="min-w-full">
@@ -169,7 +172,7 @@ export function ResultPage() {
                             {
                                 data.results.major.map((res) => {
                                     return (
-                                        <tr className="">
+                                <tr key={res.ue}>
                                             <td className="py-2">{res.ue}</td>
                                             <td className="text-center py-2">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>
@@ -205,7 +208,7 @@ export function ResultPage() {
                             {
                                 data.results.minor.map((res) => {
                                     return (
-                                        <tr className="">
+                                <tr key={res.ue}>
                                             <td className="py-2">{res.ue}</td>
                                             <td className="text-center py-2 ">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>
@@ -217,7 +220,7 @@ export function ResultPage() {
                                 })
                             }
                             <tr>
-                                <td className="py-2">Moyenne Pondérée UE Majeures</td>
+                                <td className="py-2">Moyenne Pondérée UE Mineures</td>
                                 <td className="text-center py-2">{cectMinSum}</td>
                                 <td className="text-center py-2">{ averageMin.toFixed(2) }</td>
                                 <td className="text-center py-2">_</td>

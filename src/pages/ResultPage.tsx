@@ -102,7 +102,7 @@ export function ResultPage() {
 
         const options = {
             margin: 0,
-                    filename: `releve-${data.matricule}.pdf`,
+            filename: `releve-${data.matricule}.pdf`,
             image: {
                 type: "jpeg" as const,
                 quality: 0.98,
@@ -126,9 +126,6 @@ export function ResultPage() {
     
     return (
         <div>
-            <p className="mx-auto max-w-4xl p-3 text-center font-semibold text-red-800 bg-red-100">
-                Démonstration : ces résultats sont fictifs et ne correspondent pas aux informations saisies.
-            </p>
             <div className="print:hidden flex justify-center p-2">
                 <button 
                     className="btn btn-primary w-full max-w-lg"
@@ -142,6 +139,9 @@ export function ResultPage() {
                 id="print-section"
                 className="w-full flex flex-col items-center justify-center p-2 gap-8"
             >
+                <p className="w-full p-3 text-center font-semibold text-red-800 bg-red-100">
+                    Démonstration : ces résultats sont fictifs et ne correspondent pas aux informations saisies.
+                </p>
                 <div className="flex items-center justify-between w-full">
                     <img className="block aspect-video h-25" src={logo} alt="logo" />
                     <div className="flex flex-col items-center justify-center">
@@ -172,7 +172,7 @@ export function ResultPage() {
                             {
                                 data.results.major.map((res) => {
                                     return (
-                                <tr key={res.ue}>
+                                        <tr key={res.ue}>
                                             <td className="py-2">{res.ue}</td>
                                             <td className="text-center py-2">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>
@@ -208,7 +208,7 @@ export function ResultPage() {
                             {
                                 data.results.minor.map((res) => {
                                     return (
-                                <tr key={res.ue}>
+                                        <tr key={res.ue}>
                                             <td className="py-2">{res.ue}</td>
                                             <td className="text-center py-2 ">{res.cect}</td>
                                             <td className="text-center py-2">{res.note.toFixed(2)}</td>

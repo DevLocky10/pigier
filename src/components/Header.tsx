@@ -8,7 +8,7 @@ export function Header() {
             <img className="h-20 w-20" src={logo} alt="Pigier" />
         </Link>
       
-        <Link className="btn btn-primary block" to="/level">
+        <Link className="btn btn-primary block text-sm sm:text-base" to="/level">
             Consulter mes résultats
         </Link>
     </header>

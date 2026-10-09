@@ -3,23 +3,25 @@
 @theme {
   --color-primary: #F2B705;
   --color-primary-light: #F2E399;
-
   --color-secondary: #034AA6;
   --color-secondary-light: #0568A6;
-
   --color-surface: #789EBF;
-
   --color-neutral: #F0EDEF;
 }
 
 html {
-  @apply text-sm md:text-lg lg:text-xl;
-  @apply bg-neutral;
+  font-size: 100%;
+  @apply scroll-smooth bg-neutral;
+}
+
+body {
+  @apply m-0 min-h-screen min-w-[320px] bg-neutral text-base leading-relaxed text-slate-900 antialiased;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 @layer utilities {
   .btn {
-    @apply px-4 py-2 rounded-md text-neutral font-semibold;
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-base leading-6 font-semibold text-neutral transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
   }
 
   .btn-primary {
@@ -27,21 +29,25 @@ html {
   }
 
   .btn-secondary {
-    @apply  bg-secondary-light hover:bg-secondary;
+    @apply bg-secondary-light hover:bg-secondary;
   }
 
   .infoCard {
-    @apply p-4 rounded-lg shadow-md;
+    @apply overflow-hidden rounded-lg p-4 shadow-md;
     background: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
   }
 
   .infoCard h2 {
-    @apply text-xl font-bold mb-2;
+    @apply mb-2 text-lg leading-snug font-bold sm:text-xl;
     color: var(--color-primary);
   }
 
+  .infoCard p {
+    @apply text-sm leading-relaxed text-neutral sm:text-base;
+  }
+
   .linkCard {
-    @apply p-4 rounded-lg shadow-md text-lg font-bold;
+    @apply rounded-lg p-4 text-base leading-snug font-bold shadow-md transition-colors sm:text-lg;
     background: linear-gradient(to bottom, var(--color-secondary), var(--color-secondary-light));
   }
 }

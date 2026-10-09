@@ -79,18 +79,101 @@ const mockData = {
     }
 }
 
+type ResultItem = (typeof mockData.results.major)[number];
+
+function ResultSection({ title, items }: { title: string; items: ResultItem[] }) {
+    const cectTotal = items.reduce((total, item) => total + item.cect, 0);
+    const capitalizedTotal = items.reduce((total, item) => total + item.cect_cap, 0);
+    const weightedTotal = items.reduce((total, item) => total + item.note * item.cect, 0);
+    const average = cectTotal === 0 ? 0 : weightedTotal / cectTotal;
+
+    return (
+        <section className="space-y-3">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <h2 className="text-lg leading-6 font-bold text-slate-900 sm:text-xl">{title}</h2>
+                    <p className="text-sm leading-5 text-slate-500 sm:text-base">{items.length} unité(s) d’enseignement</p>
+                </div>
+                <p className="text-sm leading-5 text-slate-600 sm:text-base">
+                    Moyenne pondérée : <span className="font-bold text-slate-900">{average.toFixed(2)} / 20</span>
+                </p>
+            </div>
+
+            <div className="space-y-3 md:hidden print:hidden">
+                {items.map((item) => {
+                    const isPassed = item.result.toLocaleLowerCase("fr").includes("admis");
+                    return (
+                        <article key={item.ue} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                            <div className="flex items-start justify-between gap-3">
+                                <h3 className="text-base leading-6 font-semibold text-slate-900">{item.ue}</h3>
+                                <span className={"shrink-0 rounded-full px-2.5 py-1 text-sm leading-5 font-semibold " + (isPassed ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800")}>{item.result}</span>
+                            </div>
+                            <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm leading-5">
+                                <div><dt className="text-slate-500">Note</dt><dd className="mt-0.5 font-semibold text-slate-900">{item.note.toFixed(2)} / 20</dd></div>
+                                <div><dt className="text-slate-500">Crédits CECT</dt><dd className="mt-0.5 font-semibold text-slate-900">{item.cect}</dd></div>
+                                <div><dt className="text-slate-500">Session</dt><dd className="mt-0.5 font-semibold text-slate-900">{item.session}</dd></div>
+                                <div><dt className="text-slate-500">Capitalisés</dt><dd className="mt-0.5 font-semibold text-slate-900">{item.cect_cap} CECT</dd></div>
+                            </dl>
+                        </article>
+                    );
+                })}
+                <div className="flex items-center justify-between rounded-xl bg-blue-50 px-4 py-3 text-sm leading-5">
+                    <span className="font-semibold text-slate-700">Total · {average.toFixed(2)} / 20</span>
+                    <span className="font-bold text-[#034AA6]">{capitalizedTotal} / {cectTotal} CECT</span>
+                </div>
+            </div>
+
+            <div className="hidden overflow-x-auto rounded-xl border border-slate-200 md:block print:block print:overflow-visible">
+                <table className="w-full min-w-[800px] border-collapse text-sm leading-5 print:min-w-0 print:text-xs">
+                    <caption className="sr-only">{title} : notes, crédits et résultats</caption>
+                    <thead className="bg-slate-100 text-left text-sm font-semibold text-slate-600">
+                        <tr>
+                            <th className="px-4 py-3" scope="col">Unité d’enseignement</th>
+                            <th className="px-3 py-3 text-center" scope="col">CECT</th>
+                            <th className="px-3 py-3 text-center" scope="col">Note / 20</th>
+                            <th className="px-3 py-3 text-center" scope="col">Résultat</th>
+                            <th className="px-3 py-3 text-center" scope="col">Session</th>
+                            <th className="px-3 py-3 text-center" scope="col">CECT capitalisés</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 bg-white">
+                        {items.map((item) => {
+                            const isPassed = item.result.toLocaleLowerCase("fr").includes("admis");
+                            return (
+                                <tr key={item.ue} className="transition-colors hover:bg-slate-50">
+                                    <th className="max-w-[360px] px-4 py-3 text-left font-medium text-slate-800" scope="row">{item.ue}</th>
+                                    <td className="px-3 py-3 text-center tabular-nums">{item.cect}</td>
+                                    <td className="px-3 py-3 text-center font-semibold tabular-nums">{item.note.toFixed(2)}</td>
+                                    <td className="px-3 py-3 text-center">
+                                        <span className={"inline-flex rounded-full px-2.5 py-1 text-sm leading-5 font-semibold print:px-1 print:py-0 " + (isPassed ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800")}>{item.result}</span>
+                                    </td>
+                                    <td className="px-3 py-3 text-center">{item.session}</td>
+                                    <td className="px-3 py-3 text-center tabular-nums">{item.cect_cap}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                    <tfoot className="bg-blue-50 font-semibold text-slate-800">
+                        <tr>
+                            <th className="px-4 py-3 text-left" scope="row">Total · moyenne {average.toFixed(2)} / 20</th>
+                            <td className="px-3 py-3 text-center tabular-nums">{cectTotal}</td>
+                            <td className="px-3 py-3 text-center tabular-nums">{average.toFixed(2)}</td>
+                            <td className="px-3 py-3 text-center" colSpan={2}>CECT capitalisés</td>
+                            <td className="px-3 py-3 text-center tabular-nums">{capitalizedTotal}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    );
+}
+
 export function ResultPage() {
     const data = mockData;
-
-    const notesMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + (cur.note*cur.cect), 0 );
-    const cectMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
-    const cectCapMajSum = data.results.major.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
-    const averageMaj = notesMajSum / cectMajSum;
-    
-    const notesMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + (cur.note*cur.cect), 0 );
-    const cectMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect, 0 );
-    const cectCapMinSum = data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 );
-    const averageMin = notesMinSum / cectMinSum;
+    const cectTotal = data.results.major.reduce((total, item) => total + item.cect, 0)
+        + data.results.minor.reduce((total, item) => total + item.cect, 0);
+    const capitalizedTotal = data.results.major.reduce((total, item) => total + item.cect_cap, 0)
+        + data.results.minor.reduce((total, item) => total + item.cect_cap, 0);
 
     const handleDownload = () => {
         const element = document.getElementById("print-section");
@@ -100,140 +183,58 @@ export function ResultPage() {
             return;
         }
 
-        const options = {
-            margin: 0,
-            filename: `releve-${data.matricule}.pdf`,
-            image: {
-                type: "jpeg" as const,
-                quality: 0.98,
-            },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-            },
-            jsPDF: {
-                unit: "mm",
-                format: "a4",
-                orientation: "portrait" as const
-            },
-        };
-
-        html2pdf()
-            .set(options)
+        void html2pdf()
+            .set({
+                margin: 8,
+                filename: "releve-" + data.matricule + ".pdf",
+                image: { type: "jpeg" as const, quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const },
+                pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+            })
             .from(element)
             .save();
     };
-    
+
     return (
-        <div>
-            <div className="print:hidden flex justify-center p-2">
-                <button 
-                    className="btn btn-primary w-full max-w-lg"
-                    onClick={handleDownload}
-                >
-                    Télécharger mon relevé de notes
-                </button>
-            </div>
+        <main className="min-h-screen bg-slate-50 px-3 py-5 text-slate-900 sm:px-6 sm:py-8">
+            <div className="mx-auto max-w-6xl">
+                <div className="mb-4 flex justify-end sm:mb-6 print:hidden">
+                    <button className="btn btn-primary w-full text-sm sm:w-auto sm:text-base" onClick={handleDownload} type="button">
+                        Télécharger le relevé PDF
+                    </button>
+                </div>
 
-            <div
-                id="print-section"
-                className="w-full flex flex-col items-center justify-center p-2 gap-8"
-            >
-                <p className="w-full p-3 text-center font-semibold text-red-800 bg-red-100">
-                    Démonstration : ces résultats sont fictifs et ne correspondent pas aux informations saisies.
-                </p>
-                <div className="flex items-center justify-between w-full">
-                    <img className="block aspect-video h-25" src={logo} alt="logo" />
-                    <div className="flex flex-col items-center justify-center">
-                        <h2 className="font-bold mb-1 text-center text-xl">RELEVE DE NOTES ET RESULTATS</h2>
-                        <p>Année académique {data.year}</p>
-                        <p>{data.semester}</p>
+                <div id="print-section" className="space-y-6 rounded-2xl bg-white p-4 shadow-sm sm:space-y-8 sm:p-7 print:space-y-4 print:rounded-none print:p-0 print:shadow-none">
+                    <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+                        <img className="h-14 w-auto self-start object-contain sm:h-16" src={logo} alt="Pigier" />
+                        <div className="sm:text-right">
+                            <p className="text-sm leading-5 font-semibold uppercase tracking-wide text-[#034AA6] sm:text-base">Année académique {data.year} · {data.semester}</p>
+                            <h1 className="mt-1 text-2xl leading-tight font-bold tracking-tight text-slate-900 sm:text-3xl">Relevé de notes et résultats</h1>
+                        </div>
                     </div>
-                </div>
-                <div className="flex flex-col justify-start w-full">
-                    <span className="font-bold">{data.name.toUpperCase()}</span>
-                    <span>Matricule: {data.matricule}</span>
-                    <span>Inscrit(e) en: {data.Class}</span>
-                </div>
-                <div className="w-full flex flex-col align-center gap-5">
-                    <table className="min-w-full">
-                        <thead>
-                            <tr>
-                                <th className="text-sm text-left" scope="col">UNITE D'ENSSEIGNEMENT</th>
-                                <th className="text-sm px-1" scope="col">CECT</th>
-                                <th className="text-sm px-1"  scope="col">NOTES</th>
-                                <th className="text-sm px-1"  scope="col">RESULTAT</th>
-                                <th className="text-sm px-1"  scope="col">SESSION</th>
-                                <th className="text-sm px-1"  scope="col">CECT CAPITALISES</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            {
-                                data.results.major.map((res) => {
-                                    return (
-                                        <tr key={res.ue}>
-                                            <td className="py-2">{res.ue}</td>
-                                            <td className="text-center py-2">{res.cect}</td>
-                                            <td className="text-center py-2">{res.note.toFixed(2)}</td>
-                                            <td className="text-center py-2">{res.result}</td>
-                                            <td className="text-center py-2">{res.session}</td>
-                                            <td className="text-center py-2">{res.cect_cap}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                            <tr>
-                                <td className="py-2">Moyenne Pondérée UE Majeures</td>
-                                <td className="text-center py-2">{cectMajSum}</td>
-                                <td className="text-center py-2">{ averageMaj.toFixed(2) }</td>
-                                <td className="text-center py-2">_</td>
-                                <td className="text-center py-2">_</td>
-                                <td className="text-center py-2 tab">{data.results.major.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 )}</td>
-                            </tr>
-                        </tbody>  
+                    <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-5 text-amber-900 sm:text-base">
+                        Démonstration : ces résultats sont fictifs et ne correspondent pas aux informations saisies.
+                    </p>
 
-                        <thead>
-                            <tr>
-                                <th className="text-sm text-left pt-5" scope="col">UNITE D'ENSSEIGNEMENT</th>
-                                <th className="text-sm pt-5" scope="col">CECT</th>
-                                <th className="text-sm pt-5" scope="col">NOTES</th>
-                                <th className="text-sm pt-5" scope="col">RESULTAT</th>
-                                <th className="text-sm pt-5" scope="col">SESSION</th>
-                                <th className="text-sm pt-5" scope="col">CECT CAPITALISES</th>
-                            </tr>
-                        </thead>
+                    <section className="grid gap-3 rounded-xl bg-slate-50 p-4 text-sm leading-5 sm:grid-cols-3 sm:gap-4 sm:p-5 sm:text-base">
+                        <div><p className="text-sm text-slate-500">Étudiant</p><p className="mt-1 font-semibold">{data.name}</p></div>
+                        <div><p className="text-sm text-slate-500">Matricule</p><p className="mt-1 font-semibold">{data.matricule}</p></div>
+                        <div><p className="text-sm text-slate-500">Formation</p><p className="mt-1 font-semibold">{data.Class.trim()}</p></div>
+                    </section>
 
-                        <tbody>
-                            {
-                                data.results.minor.map((res) => {
-                                    return (
-                                        <tr key={res.ue}>
-                                            <td className="py-2">{res.ue}</td>
-                                            <td className="text-center py-2 ">{res.cect}</td>
-                                            <td className="text-center py-2">{res.note.toFixed(2)}</td>
-                                            <td className="text-center py-2">{res.result}</td>
-                                            <td className="text-center py-2">{res.session}</td>
-                                            <td className="text-center py-2">{res.cect_cap}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                            <tr>
-                                <td className="py-2">Moyenne Pondérée UE Mineures</td>
-                                <td className="text-center py-2">{cectMinSum}</td>
-                                <td className="text-center py-2">{ averageMin.toFixed(2) }</td>
-                                <td className="text-center py-2">_</td>
-                                <td className="text-center py-2">_</td>
-                                <td className="text-center py-2 tab">{data.results.minor.reduce((accumulator, cur) =>  accumulator + cur.cect_cap, 0 )}</td>
-                            </tr>
-                        </tbody>   
-                    </table>
+                    <div className="space-y-6 sm:space-y-8">
+                        <ResultSection title="Unités d’enseignement majeures" items={data.results.major} />
+                        <ResultSection title="Unités d’enseignement mineures" items={data.results.minor} />
+                    </div>
+
+                    <section aria-label="Total des crédits" className="flex flex-col gap-1 border-t border-slate-200 pt-4 text-sm leading-5 sm:flex-row sm:items-center sm:justify-between sm:text-base">
+                        <h2 className="font-semibold text-slate-700">Total des CECT capitalisés</h2>
+                        <p className="text-lg leading-6 font-bold text-[#034AA6] sm:text-xl">{capitalizedTotal} / {cectTotal} CECT</p>
+                    </section>
                 </div>
-                <p className="w-full font-bold text-right">
-                    TOTAL CECT CAPITALISE: {`${cectCapMajSum+cectCapMinSum} / ${cectMajSum+cectMinSum}`}
-                </p>
             </div>
-        </div>
+        </main>
     );
 }

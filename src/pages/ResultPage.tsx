@@ -1,3 +1,4 @@
+import { useState } from "react";
 import html2pdf from "html2pdf.js";
 import logo from "../assets/logo_pigier_bulettin.png";
 
@@ -170,20 +171,26 @@ function ResultSection({ title, items }: { title: string; items: ResultItem[] })
 
 export function ResultPage() {
     const data = mockData;
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [downloadError, setDownloadError] = useState("");
     const cectTotal = data.results.major.reduce((total, item) => total + item.cect, 0)
         + data.results.minor.reduce((total, item) => total + item.cect, 0);
     const capitalizedTotal = data.results.major.reduce((total, item) => total + item.cect_cap, 0)
         + data.results.minor.reduce((total, item) => total + item.cect_cap, 0);
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         const element = document.getElementById("print-section");
 
         if (!element) {
-            console.error("Section introuvable");
+            setDownloadError("Le relevé à télécharger est introuvable.");
             return;
         }
 
-        void html2pdf()
+        setDownloadError("");
+        setIsDownloading(true);
+
+        try {
+            await html2pdf()
             .set({
                 margin: 8,
                 filename: "releve-" + data.matricule + ".pdf",
@@ -194,15 +201,24 @@ export function ResultPage() {
             })
             .from(element)
             .save();
+        } catch (error) {
+            console.error("Échec de la génération du relevé PDF", error);
+            setDownloadError("Le PDF n’a pas pu être généré. Réessaie ou vérifie les paramètres de téléchargement du navigateur.");
+        } finally {
+            setIsDownloading(false);
+        }
     };
 
     return (
         <main className="min-h-screen bg-slate-50 px-3 py-5 text-slate-900 sm:px-6 sm:py-8">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-4 flex justify-end sm:mb-6 print:hidden">
-                    <button className="btn btn-primary w-full text-sm sm:w-auto sm:text-base" onClick={handleDownload} type="button">
-                        Télécharger le relevé PDF
-                    </button>
+                    <div className="w-full sm:w-auto">
+                        <button className="btn btn-primary w-full text-sm sm:w-auto sm:text-base disabled:cursor-wait disabled:opacity-60" onClick={handleDownload} type="button" disabled={isDownloading} aria-busy={isDownloading}>
+                            {isDownloading ? "Génération du PDF…" : "Télécharger le relevé PDF"}
+                        </button>
+                        {downloadError && <p className="mt-2 text-sm text-red-700" role="alert">{downloadError}</p>}
+                    </div>
                 </div>
 
                 <div id="print-section" className="space-y-6 rounded-2xl bg-white p-4 shadow-sm sm:space-y-8 sm:p-7 print:space-y-4 print:rounded-none print:p-0 print:shadow-none">

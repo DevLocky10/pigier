@@ -1,17 +1,15 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function StudiantForm() {
     const navigate = useNavigate();
 
-    const { level_id, session_id } = useParams<{ level_id: string; session_id: string }>();
     const [ matricule, setMatricule ] = useState("");
     const [ birthdate, setBirthdate ] = useState("");
 
-    const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         navigate("/result");
-        console.log(`Matricule: ${matricule}, Birthdate: ${birthdate}, Level ID: ${level_id}, Session ID: ${session_id}`);
     }
 
     return (
@@ -22,21 +20,27 @@ export function StudiantForm() {
                     onSubmit={onSubmit}
                 >
                     <div className="mb-4">
+                        <label className="mb-1 block text-neutral" htmlFor="matricule">Matricule</label>
                         <input
                             className="shadow text-gray-100 appearance-none border border-primary  rounded w-full py-2 px-3 leading-tight focus:border-2 focus:outline-none focus:shadow-outline"
                             id="matricule"
+                            name="matricule"
                             type="text"
                             placeholder="Entrez votre matricule"
+                            autoComplete="off"
+                            required
                             value={matricule}
                             onChange={(e) => setMatricule(e.target.value)}
                         />
                     </div>
                     <div className="mb-4">
+                        <label className="mb-1 block text-neutral" htmlFor="birthdate">Date de naissance</label>
                         <input
                             className="shadow text-gray-100 appearance-none border border-primary  rounded w-full py-2 px-3 leading-tight focus:border-2 focus:outline-none focus:shadow-outline"
                             id="birthdate"
+                            name="birthdate"
                             type="date"
-                            placeholder="JJ/MM/AAAA"
+                            required
                             value={birthdate}
                             onChange={(e) => setBirthdate(e.target.value)}
                         />
@@ -46,7 +50,7 @@ export function StudiantForm() {
                             className="bg-primary w-full hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
                         >
-                            Conculter mes resultats
+                            Consulter mes résultats
                         </button>
                     </div>
                 </form>
